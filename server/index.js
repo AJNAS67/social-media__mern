@@ -8,6 +8,12 @@ import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
+import { register } from "./controllers/auth.js";
+// import { login } from "./controllers/auth.js";
+// import {authRout} from './routes/auth.js'
+// const authRoute  = require('./routes/auth.js'
+import authRoutes from "./routes/auth.js";
+import { createPost } from "./controllers/post.js";
 
 /* CONFIGURATIONS */
 const __filename = fileURLToPath(import.meta.url);
@@ -23,12 +29,27 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
+/* FILE STORAGE */
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "public/assets");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+const upload = multer({ storage });
 
+/* ROUTES WITH FILES */
+app.post("/auth/register", upload.single("picture"), register);
+app.post("/user/createpost",upload.single("picture"),createPost)
 
+/* ROUTES */
+// app.use("/auth",authRoutes)
+app.use("/auth", authRoutes);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
-console.log(process.env.MONGO_URL,'mongourl');
 mongoose
   .connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
