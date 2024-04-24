@@ -13,6 +13,7 @@ import { register } from "./controllers/auth.js";
 // import {authRout} from './routes/auth.js'
 // const authRoute  = require('./routes/auth.js'
 import authRoutes from "./routes/auth.js";
+import usersRoute from "./routes/users.js"
 import { createPost } from "./controllers/post.js";
 
 /* CONFIGURATIONS */
@@ -45,8 +46,8 @@ app.post("/auth/register", upload.single("picture"), register);
 app.post("/user/createpost",upload.single("picture"),createPost)
 
 /* ROUTES */
-// app.use("/auth",authRoutes)
 app.use("/auth", authRoutes);
+app.use("/users",usersRoute)
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
