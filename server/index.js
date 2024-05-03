@@ -13,8 +13,13 @@ import { register } from "./controllers/auth.js";
 // import {authRout} from './routes/auth.js'
 // const authRoute  = require('./routes/auth.js'
 import authRoutes from "./routes/auth.js";
-import usersRoute from "./routes/users.js"
+import usersRoute from "./routes/users.js";
+import postRoutes from "./routes/posts.js";
 import { createPost } from "./controllers/post.js";
+import { users, posts } from "./data/index.js";
+import User from "./models/User.js";
+import Post from "./models/Post.js";
+
 
 /* CONFIGURATIONS */
 const __filename = fileURLToPath(import.meta.url);
@@ -47,7 +52,9 @@ app.post("/user/createpost",upload.single("picture"),createPost)
 
 /* ROUTES */
 app.use("/auth", authRoutes);
-app.use("/users",usersRoute)
+app.use("/users",usersRoute);
+app.use("/posts", postRoutes);
+
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
