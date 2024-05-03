@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import UserWidget from "../widgets/UserWidget.jsx";
 import MyPostWidget from "../widgets/MyPostWidget.jsx";
 import PostsWidget from "../widgets/PostsWidget.jsx"
+import AdvertWidget from "../widgets/AdvertWidget.jsx";
 
 const HomePage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
@@ -32,6 +33,7 @@ const HomePage = () => {
           <PostsWidget userId={_id} />
       
         </Box>
+        {isNonMobileScreens && (<AdvertWidget/>)}
        
       </Box>
     </Box>
