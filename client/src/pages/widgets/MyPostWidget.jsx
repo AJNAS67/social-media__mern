@@ -24,7 +24,7 @@ import UserImage from "../../components/UserImage";
 import WidgetWrapper from "../../components/WidgetWrapper.jsx";
 import { useSelector,useDispatch } from "react-redux";
 import { useState } from "react";
-import { setPost } from "../../state/index";
+import { setPosts } from "../../state/index";
 const MyPostWidget = ({ picturePath }) => {
     const dispatch = useDispatch();
     const [isImage, setIsImage] = useState(false);
@@ -45,6 +45,7 @@ const MyPostWidget = ({ picturePath }) => {
           formData.append("picture", image);
           formData.append("picturePath", image.name);
         }
+        console.log(formData,'form data handle post');
     
         const response = await fetch(`http://localhost:3001/posts`, {
           method: "POST",
@@ -52,6 +53,7 @@ const MyPostWidget = ({ picturePath }) => {
           body: formData,
         });
         const posts = await response.json();
+        console.log(posts,'post resp');
         dispatch(setPosts({ posts }));
         setImage(null);
         setPost("");

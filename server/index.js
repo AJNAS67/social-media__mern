@@ -16,6 +16,7 @@ import authRoutes from "./routes/auth.js";
 import usersRoute from "./routes/users.js";
 import postRoutes from "./routes/posts.js";
 import { createPost } from "./controllers/post.js";
+import { verifyToken } from "./middleware/auth.js";
 import { users, posts } from "./data/index.js";
 import User from "./models/User.js";
 import Post from "./models/Post.js";
@@ -49,6 +50,7 @@ const upload = multer({ storage });
 /* ROUTES WITH FILES */
 app.post("/auth/register", upload.single("picture"), register);
 app.post("/user/createpost",upload.single("picture"),createPost)
+app.post("/posts", verifyToken, upload.single("picture"), createPost);
 
 /* ROUTES */
 app.use("/auth", authRoutes);

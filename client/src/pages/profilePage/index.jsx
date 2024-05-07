@@ -1,11 +1,60 @@
-import React from 'react'
+import React from "react";
+import { Box, useMediaQuery } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import FriendListWidget from "../widgets/FriendListWidget";
+import MyPostWidget from "..//widgets/MyPostWidget";
+import PostsWidget from "..//widgets/PostsWidget";
+import UserWidget from "..//widgets/UserWidget";
+import Navbar from "../../pages/navbar/index";
 
 const ProfilePage = () => {
-  return (
-    <div>
-        
-    </div>
-  )
-}
+  const [user, setUser] = useState(null);
+  const { userId } = useParams();
+  const token = useSelector((state) => state.token);
+  const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
 
-export default ProfilePage
+  const getUser = async () => {
+    const resp = await fetch(`http://localhost:3001/users/${userId}`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await resp.json();
+    console.log(data, "profile data");
+    setUser(data);
+  };
+  useEffect(() => {
+    getUser();
+  }, []);
+  return (
+    <Box>
+      <Navbar/>
+      {user ? (
+        <Box
+          width="100%"
+          padding="2rem 6%"
+          display={isNonMobileScreens ? "flex" : "block"}
+          gap="2rem"
+          justifyContent="center"
+        >
+          <Box flexBasis={isNonMobileScreens ? "26%" : undefined}>
+            <UserWidget userId={userId} picturePath={user.picturePath} />
+            <Box m="2rem 0" />
+            <FriendListWidget userId={userId} />
+          </Box>
+          <Box
+            flexBasis={isNonMobileScreens ? "42%" : undefined}
+            mt={isNonMobileScreens ? undefined : "2rem"}
+          >
+            <MyPostWidget picturePath={user.picturePath} />
+            <Box m="2rem 0" />
+            <PostsWidget userId={userId} isProfile />
+          </Box>
+        </Box>
+      ) : null}
+    </Box>
+  );
+};
+
+export default ProfilePage;
